@@ -1,16 +1,18 @@
 import Foundation
 
 struct Task {
-    enum Status {
-        case notStarted
-        case inProgress
-        case completed
+    enum Status: String, CaseIterable { // int is the raw value
+        case notStarted = "Not Started"
+        case inProgress = "In Progress"
+        case completed = "Completed"
     }
     
     let name: String
     let status: Status
     let dueDate: Date    
     
+    
+    // type variable
     static var allTasks: [Task] {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en")
@@ -62,6 +64,31 @@ struct Task {
                  status: .completed,
                  dueDate: dateFormatter.date(from: "04-13-2020")!),
         ]
+        
+        
+    }
+    
+    static func getSections() -> [[Task]] {
+        
+        var sectionsArr = Array(repeating: [Task](), count: Status.allCases.count)
+
+        for task in allTasks {
+        // sectionsArr[thing.status.rawValue].append(thing)
+
+           switch task.status {
+            case .notStarted:
+                sectionsArr[0].append(task)
+            case .inProgress:
+                sectionsArr[1].append(task)
+            case .completed:
+                sectionsArr[2].append(task)
+            }
+        }
+         
+        return sectionsArr
+        
     }
 
 }
+
+
